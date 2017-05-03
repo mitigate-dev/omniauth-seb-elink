@@ -1,5 +1,5 @@
 require 'omniauth'
-# require 'base64'
+require 'base64'
 require_relative 'seb/message'
 require_relative 'seb/response'
 
@@ -25,8 +25,10 @@ module OmniAuth
       end
 
       info do
+        user_info = request.params['IB_USER_INFO']
+        full_name = user_info.match(/USER=(.+)/) ? user_info.match(/USER=(.+)/)[1] : user_info.match(/NAME=(.+)/)[1]
         {
-          full_name: request.params['IB_USER_INFO'].split(" ").reverse.join(" ")
+          full_name: full_name
         }
       end
 

@@ -43,24 +43,24 @@ describe OmniAuth::Strategies::Seb do
     context "with valid response" do
       before do
         post '/auth/seb/callback',
-          "B02K_ALG": "01",
-          "B02K_CUSTID": "37404280367",
-          "B02K_CUSTNAME": "RAITUMS ARNIS",
-          "B02K_CUSTTYPE": "01",
-          "B02K_IDNBR": "87654321LV",
-          "B02K_KEYVERS": "0001",
-          "B02K_MAC": "B2B82821F6EB9CA28E4D67F343914363",
-          "B02K_STAMP": "yyyymmddhhmmssxxxxxx",
-          "B02K_TIMESTMP": "20020170329134514398",
-          "B02K_VERS": "0002"
+          'IB_SND_ID': 'SEBUB',
+          'IB_SERVICE': '0001',
+          'IB_REC_ID': 'AAA',
+          'IB_USER': '050505-12123',
+          'IB_DATE': '05.12.2003',
+          'IB_TIME': '10:00:00',
+          'IB_USER_INFO': 'ID=050505-12123;NAME=JOHN DOE',
+          'IB_VERSION': '001',
+          'IB_CRC': 'abc',
+          'IB_LANG': 'LAT'
       end
 
       it 'sets the correct uid value in the auth hash' do
-        expect(auth_hash.uid).to eq("374042-80367")
+        expect(auth_hash.uid).to eq('050505-12123')
       end
 
       it 'sets the correct info.full_name value in the auth hash' do
-        expect(auth_hash.info.full_name).to eq("ARNIS RAITUMS")
+        expect(auth_hash.info.full_name).to eq('JOHN DOE')
       end
     end
 
@@ -78,24 +78,38 @@ describe OmniAuth::Strategies::Seb do
       end
     end
 
+    context 'with non-existant SND ID' do
+      let(:app){ Rack::Builder.new do |b|
+        b.use Rack::Session::Cookie, {secret: 'abc123'}
+        b.use(OmniAuth::Strategies::Seb, PUBLIC_CRT, nil )
+        b.run lambda{|env| [404, {}, ['Not Found']]}
+      end.to_app }
+
+      it 'redirects to /auth/failure with appropriate query params' do
+        post '/auth/seb/callback' # Params are not important, because we're testing public key loading
+        expect(last_response.status).to eq(302)
+        expect(last_response.headers['Location']).to eq('/auth/failure?message=invalid_response_snd_id_err&strategy=seb')
+      end
+    end
+
     context "with invalid MAC" do
       before do
         post '/auth/seb/callback',
-          "B02K_ALG": "01",
-          "B02K_CUSTID": "37404280367",
-          "B02K_CUSTNAME": "RAITUMS ARNIS",
-          "B02K_CUSTTYPE": "01",
-          "B02K_IDNBR": "87654321LV",
-          "B02K_KEYVERS": "0001",
-          "B02K_MAC": "B9CA28E4D67F343914B2B82821F6E363",
-          "B02K_STAMP": "yyyymmddhhmmssxxxxxx",
-          "B02K_TIMESTMP": "20020170329134514398",
-          "B02K_VERS": "0002"
+        'IB_SND_ID': 'SEBUB',
+        'IB_SERVICE': '0001',
+        'IB_REC_ID': 'AAA',
+        'IB_USER': '050505-12123',
+        'IB_DATE': '05.12.2003',
+        'IB_TIME': '10:00:00',
+        'IB_USER_INFO': 'ID=050505-12123;NAME=JOHN DOE',
+        'IB_VERSION': '001',
+        'IB_CRC': 'abc',
+        'IB_LANG': 'LAT'
       end
 
       it "fails with invalid_mac error" do
         expect(auth_hash).to eq(nil)
-        expect(last_request.env['omniauth.error.type']).to eq(:invalid_mac)
+        expect(last_request.env['omniauth.error.type']).to eq(:invalid_response_snd_id_err)
       end
     end
 
