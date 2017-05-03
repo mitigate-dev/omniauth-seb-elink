@@ -5,7 +5,7 @@ require 'omniauth/seb/version'
 
 Gem::Specification.new do |gem|
   gem.name          = 'omniauth-seb-elink'
-  gem.version       = Omniauth::SEB::VERSION
+  gem.version       = Omniauth::Seb::VERSION
   gem.authors       = ['MAK IT']
   gem.email         = ['admin@makit.lv']
   gem.description   = %q{OmniAuth strategy for SEB e-link}

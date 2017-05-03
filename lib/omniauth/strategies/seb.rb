@@ -1,11 +1,11 @@
 require 'omniauth'
+# require 'base64'
 require_relative 'seb/message'
-require_relative 'seb/request'
 require_relative 'seb/response'
 
 module OmniAuth
   module Strategies
-    class SEB
+    class Seb
       class ValidationError < StandardError; end
 
       AUTH_SERVICE = '0005'
@@ -35,20 +35,33 @@ module OmniAuth
       end
 
       def callback_phase
-        if request.params["B02K_CUSTID"] && !request.params["B02K_CUSTID"].empty?
-          message = OmniAuth::Strategies::Nordea::Response.new(request.params)
-          message.validate!(options.mac)
-          super
-        else
-          fail!(:invalid_credentials)
+        begin
+          pub_crt = OpenSSL::X509::Certificate.new(options.public_crt).public_key
+        rescue => e
+          return fail!(:public_crt_load_err, e)
         end
+
+        if request.params['IB_SND_ID'] != 'SEBUB'
+          return fail!(:invalid_response_snd_id_err)
+        end
+
+        if request.params['IB_SERVICE'] != '0001'
+          return fail!(:invalid_response_service_err)
+        end
+
+        message = OmniAuth::Strategies::Seb::Response.new(request.params)
+        message.validate!(pub_crt)
+
+        super
       rescue ValidationError => e
-        fail!(:invalid_mac, e)
+        fail!(:invalid_crc, e)
       end
 
       def request_phase
-        message = OmniAuth::Strategies::SEB::Request.new(
-          'IB_SND_ID': 'AAA',
+        fail!(:invalid_snd_id) if options.snd_id.nil?
+
+        message = OmniAuth::Strategies::Seb::Message.new(
+          'IB_SND_ID': options.snd_id,
           'IB_SERVICE': AUTH_SERVICE,
           'IB_LANG': 'LAT'
         )
@@ -59,8 +72,6 @@ module OmniAuth
         message.each_pair do |k,v|
           form.html "<input type=\"hidden\" name=\"#{k}\" value=\"#{v}\" />"
         end
-
-        puts form.inspect
 
         form.button I18n.t('omniauth.seb.click_here_if_not_redirected')
         form.instance_variable_set('@html',
