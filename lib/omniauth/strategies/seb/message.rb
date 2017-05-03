@@ -3,7 +3,7 @@ require 'digest/md5'
 
 module OmniAuth
   module Strategies
-    class Nordea
+    class SEB
       class Message
         ALGORITHM_NAMES = { "01" => :md5, "02" => :sha1 }
 

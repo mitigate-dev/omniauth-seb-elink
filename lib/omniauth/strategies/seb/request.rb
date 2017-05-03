@@ -1,6 +1,6 @@
 module OmniAuth
   module Strategies
-    class Nordea
+    class SEB
       class Request < Message
         SIGNED_KEYS = [
           'A01Y_ACTION_ID',

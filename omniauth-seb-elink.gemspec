@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'omniauth/nordea/version'
+require 'omniauth/seb/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = 'omniauth-nordea'
-  gem.version       = Omniauth::Nordea::VERSION
-  gem.authors       = ['MAK IT', 'Jānis Kiršteins', 'Kristaps Ērglis']
-  gem.email         = ['admin@makit.lv', 'janis@montadigital.com', 'kristaps.erglis@gmail.com' ]
-  gem.description   = %q{OmniAuth strategy for Nordea bank}
-  gem.summary       = %q{OmniAuth strategy for Nordea bank}
-  gem.homepage      = 'https://github.com/mak-it/omniauth-nordea'
+  gem.name          = 'omniauth-seb-elink'
+  gem.version       = Omniauth::SEB::VERSION
+  gem.authors       = ['MAK IT']
+  gem.email         = ['admin@makit.lv']
+  gem.description   = %q{OmniAuth strategy for SEB e-link}
+  gem.summary       = %q{OmniAuth strategy for SEB e-link}
+  gem.homepage      = 'https://github.com/mak-it/omniauth-seb-elink'
   gem.license       = 'MIT'
 
   gem.files         = `git ls-files`.split($/)
@@ -24,7 +24,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'i18n'
 
   gem.add_development_dependency 'rack-test'
-  gem.add_development_dependency 'rspec', '~> 2.7'
-  gem.add_development_dependency 'bundler', '~> 1.3'
+  gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'bundler'
   gem.add_development_dependency 'rake'
 end

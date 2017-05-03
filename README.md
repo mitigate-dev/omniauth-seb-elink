@@ -1,22 +1,22 @@
-# Omniauth Nordea
+# Omniauth SEB e-link
 
-Omniauth strategy for using Nordea Latvia as an authentication service provider.
+Omniauth strategy for using SEB e-link as an authentication service provider.
 
-[![Gem Version](https://badge.fury.io/rb/omniauth-nordea.svg)](http://badge.fury.io/rb/omniauth-nordea)
-[![Build Status](https://travis-ci.org/mak-it/omniauth-nordea.svg?branch=master)](https://travis-ci.org/mak-it/omniauth-nordea)
+[![Build Status](https://travis-ci.org/mak-it/omniauth-seb-elink.svg?branch=master)](https://travis-ci.org/mak-it/omniauth-seb-elink)
 
 Supported Ruby versions: 2.2+
 
 ## Related projects
 - [omniauth-citadele](https://github.com/mak-it/omniauth-citadele) - strategy for authenticating with Citadele
 - [omniauth-dnb](https://github.com/mak-it/omniauth-dnb) - strategy for authenticating with DNB
+- [omniauth-nordea](https://github.com/mak-it/omniauth-nordea) - strategy for authenticating with Nordea
 - [omniauth-swedbank](https://github.com/mak-it/omniauth-swedbank) - strategy for authenticating with Swedbank
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'omniauth-nordea'
+    gem 'omniauth-seb-elink'
 
 And then execute:
 
@@ -24,7 +24,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install omniauth-nordea
+    $ gem install omniauth-seb-elink
 
 ## Usage
 
@@ -33,9 +33,7 @@ in `config/initializers/omniauth.rb`:
 
 ```ruby
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :nordea, ENV['NORDEA_RCVID'], ENV['NORDEA_MAC'],
-    endpoint: OmniAuth::Strategies::Nordea::PRODUCTION_ENDPOINT,
-    hash_algorithm: :sha1
+  provider :seb, ENV['SEB_PUBLIC_CRT'], ENV['SEB_SND_ID']
 end
 ```
 
@@ -45,10 +43,10 @@ Here's an example Auth Hash available in `request.env['omniauth.auth']`:
 
 ```ruby
 {
-  provider: "nordea",
-  uid: "374042-80367",
+  provider: 'seb',
+  uid: '374042-80367',
   info: {
-    full_name: "ARNIS RAITUMS"
+    full_name: 'ARNIS RAITUMS'
   },
   extra: {
     raw_info: {

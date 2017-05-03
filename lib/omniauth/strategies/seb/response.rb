@@ -1,6 +1,6 @@
 module OmniAuth
   module Strategies
-    class Nordea
+    class SEB
       class Response < Message
         SIGNED_KEYS = [
           'B02K_VERS',      # 0002 (standard), 0003 (with additional data) or 0004.
