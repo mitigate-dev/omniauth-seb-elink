@@ -112,7 +112,5 @@ describe OmniAuth::Strategies::Seb do
         expect(last_request.env['omniauth.error.type']).to eq(:invalid_response_crc)
       end
     end
-
   end
-
 end

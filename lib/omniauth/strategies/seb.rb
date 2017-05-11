@@ -80,14 +80,6 @@ module OmniAuth
           form.to_html.gsub('</form>', '</form><script type="text/javascript">document.forms[0].submit();</script>'))
         form.to_response
       end
-
-      private
-
-      def callback_with_status_url(status)
-        url = URI(callback_url)
-        url.query = "omniauth_status=#{status}"
-        url
-      end
     end
   end
 end
