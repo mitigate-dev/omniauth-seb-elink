@@ -50,17 +50,16 @@ Here's an example Auth Hash available in `request.env['omniauth.auth']`:
   },
   extra: {
     raw_info: {
-      B02K_ALG: "01",
-      B02K_CUSTID: "37404280367",
-      B02K_CUSTNAME: "RAITUMS ARNIS",
-      B02K_CUSTTYPE: "01",
-      B02K_IDNBR: "87654321LV",
-      B02K_KEYVERS: "0001",
-      B02K_MAC: "B2B82821F6EB9CA28E4D67F343914363",
-      B02K_STAMP: "yyyymmddhhmmssxxxxxx",
-      B02K_TIMESTMP: "20020170329134514398",
-      B02K_VERS: "0002",
-      omniauth_status: "success"
+      IB_SND_ID: 'SEBUB',
+      IB_SERVICE: '0001',
+      IB_REC_ID: 'TETS_SND_ID',
+      IB_USER: '374042-80367',
+      IB_DATE: '11.05.2017',
+      IB_TIME: '15:22:18',
+      IB_USER_INFO: 'ID=374042-80367;NAME=ARNIS RAITUMS',
+      IB_VERSION: '001',
+      IB_CRC: 'UYVDKsdkjsd...',
+      IB_LANG: 'LAT'
     }
   }
 }

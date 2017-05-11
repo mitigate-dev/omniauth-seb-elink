@@ -51,7 +51,7 @@ describe OmniAuth::Strategies::Seb do
           'IB_TIME': '10:00:00',
           'IB_USER_INFO': 'ID=050505-12123;NAME=JOHN DOE',
           'IB_VERSION': '001',
-          'IB_CRC': 'abc',
+          'IB_CRC': 'PBlZ54E1tWoPIsyHPQvDAepiEm6/cDoIrvqGDXbRzGz7wEhXHrZxM5DxeC7XkI2IzFycTws8LLyYZXP3AluAvGoCgj/WYlLjcReLk6v4W0z1+KLGqQKpiOh+CTPjWU+VCMB9jMzbJ+p4hXiC8qQge3Y3ovsNcZjvbJJ5WMhSyv7AhHA2qcMYfYpByu7pD67QqNOh3fanpRRrQNmM2ebnVhVFQZ4xlDvWMyK2Rhfl/VigeNo7cCsPcRGcelBSTj+JmQukhIgPMhLrGFs31qNfVA2khQpY2puGv1yUz9tFG+CgoLJyBSFYexSk0qcgr5CCpEBMVcaaa/sy1FHcXKA7mg==',
           'IB_LANG': 'LAT'
       end
 
@@ -103,13 +103,13 @@ describe OmniAuth::Strategies::Seb do
         'IB_TIME': '10:00:00',
         'IB_USER_INFO': 'ID=050505-12123;NAME=JOHN DOE',
         'IB_VERSION': '001',
-        'IB_CRC': 'abc',
+        'IB_CRC': 'invalid_crc',
         'IB_LANG': 'LAT'
       end
 
       it "fails with invalid_mac error" do
         expect(auth_hash).to eq(nil)
-        expect(last_request.env['omniauth.error.type']).to eq(:invalid_response_snd_id_err)
+        expect(last_request.env['omniauth.error.type']).to eq(:invalid_response_crc)
       end
     end
 

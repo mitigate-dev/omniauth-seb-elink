@@ -56,7 +56,7 @@ module OmniAuth
 
         super
       rescue ValidationError => e
-        fail!(:invalid_crc, e)
+        fail!(:invalid_response_crc, e)
       end
 
       def request_phase

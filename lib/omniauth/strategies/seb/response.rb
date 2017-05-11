@@ -19,29 +19,12 @@ module OmniAuth
         end
 
         def validate!(pub_key)
-
-
-          # sig_str = [
-          #   request.params['VK_SERVICE'],
-          #   request.params['VK_VERSION'],
-          #   request.params['VK_SND_ID'],
-          #   request.params['VK_REC_ID'],
-          #   request.params['VK_NONCE'],
-          #   request.params['VK_INFO']
-          # ].map{|v| prepend_length(v)}.join
-          #
-          # raw_signature = Base64.decode64(request.params['VK_MAC'])
-          #
-          # if !pub_key.verify(OpenSSL::Digest::SHA1.new, raw_signature, sig_str)
-          #   return fail!(:invalid_response_signature_err)
-          # end
-
-          raw_str = SIGNED_KEYS.map{|v| prepend_length(v)}.join
+          raw_str = SIGNED_KEYS.map{|k| prepend_length(@hash[k])}.join
           received_sig_str = Base64.decode64(@hash['IB_CRC'])
 
-          # if !pub_key.verify(OpenSSL::Digest::SHA1.new, received_sig_str, raw_str)
-          #   raise ValidationError, 'Invalid signature'
-          # end
+          if !pub_key.verify(OpenSSL::Digest::SHA1.new, received_sig_str, raw_str)
+            raise ValidationError, 'Invalid signature'
+          end
 
           self
         end
