@@ -71,14 +71,23 @@ module OmniAuth
         # Build redirect form
         form = OmniAuth::Form.new(title: I18n.t('omniauth.seb.please_wait'), url: options.site)
 
+        csrf = request.env["rack.session"]["csrf"]
+        unless csrf.nil?
+          form.html "<input type=\"hidden\" name=\"authenticity_token\" value=\"#{escape(csrf)}\" />"
+        end
+
         message.each_pair do |k,v|
-          form.html "<input type=\"hidden\" name=\"#{k}\" value=\"#{v}\" />"
+          form.html "<input type=\"hidden\" name=\"#{escape(k.to_s)}\" value=\"#{escape(v)}\" />"
         end
 
         form.button I18n.t('omniauth.seb.click_here_if_not_redirected')
         form.instance_variable_set('@html',
           form.to_html.gsub('</form>', '</form><script type="text/javascript">document.forms[0].submit();</script>'))
         form.to_response
+      end
+
+      def escape(html_attribute_value)
+         CGI.escapeHTML(html_attribute_value) unless html_attribute_value.nil?
       end
     end
   end

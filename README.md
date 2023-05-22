@@ -7,6 +7,7 @@ Omniauth strategy for using SEB e-link as an authentication service provider.
 Supported Ruby versions: 2.2+
 
 ## Related projects
+
 - [omniauth-citadele](https://github.com/mak-it/omniauth-citadele) - strategy for authenticating with Citadele
 - [omniauth-dnb](https://github.com/mak-it/omniauth-dnb) - strategy for authenticating with DNB
 - [omniauth-nordea](https://github.com/mak-it/omniauth-nordea) - strategy for authenticating with Nordea
@@ -14,8 +15,9 @@ Supported Ruby versions: 2.2+
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add these lines to your application's Gemfile (omniauth-rails_csrf_protection is required if using Rails):
 
+    gem 'omniauth-rails_csrf_protection'
     gem 'omniauth-seb-elink'
 
 And then execute:
@@ -24,7 +26,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install omniauth-seb-elink
+    $ gem install gem omniauth-rails_csrf_protection omniauth-seb-elink
 
 ## Usage
 
