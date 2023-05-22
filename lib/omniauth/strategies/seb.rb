@@ -12,6 +12,14 @@ module OmniAuth
 
       include OmniAuth::Strategy
 
+      def self.render_nonce
+         defined?(ActionDispatch::ContentSecurityPolicy::Request) != nil
+      end
+      if render_nonce
+        include ActionDispatch::ContentSecurityPolicy::Request
+        delegate :get_header, :set_header, to: :request
+      end
+
       args [:public_crt, :snd_id]
 
       option :public_crt, nil
@@ -81,8 +89,12 @@ module OmniAuth
         end
 
         form.button I18n.t('omniauth.seb.click_here_if_not_redirected')
+        nonce_attribute = nil
+        if self.class.render_nonce
+          nonce_attribute = " nonce='#{escape(content_security_policy_nonce)}'"
+        end
         form.instance_variable_set('@html',
-          form.to_html.gsub('</form>', '</form><script type="text/javascript">document.forms[0].submit();</script>'))
+          form.to_html.gsub('</form>', "</form><script type=\"text/javascript\"#{nonce_attribute}>document.forms[0].submit();</script>"))
         form.to_response
       end
 
