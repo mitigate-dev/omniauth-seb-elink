@@ -35,7 +35,7 @@ describe OmniAuth::Strategies::Seb do
     EXPECTED_VALUES = {
       'IB_SND_ID': SND_ID,
       'IB_SERVICE': OmniAuth::Strategies::Seb::AUTH_SERVICE,
-      'IB_LANG': 'LAT'
+      'IB_LANG': 'ENG'
     }
 
     EXPECTED_VALUES.each_pair do |k,v|

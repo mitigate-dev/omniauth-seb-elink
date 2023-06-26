@@ -70,10 +70,12 @@ module OmniAuth
       def request_phase
         fail!(:invalid_snd_id) if options.snd_id.nil?
 
+        set_locale_from_query_param
+
         message = OmniAuth::Strategies::Seb::Message.new(
           'IB_SND_ID': options.snd_id,
           'IB_SERVICE': AUTH_SERVICE,
-          'IB_LANG': 'LAT'
+          'IB_LANG': resolve_bank_ui_language
         )
 
         # Build redirect form
@@ -94,6 +96,21 @@ module OmniAuth
       end
 
       private
+
+      def set_locale_from_query_param
+        locale = request.params['locale']
+        if (locale != nil && locale.strip != '' && I18n.locale_available?(locale))
+          I18n.locale = locale
+        end
+      end
+
+      def resolve_bank_ui_language
+        case I18n.locale
+        when :ru then 'RUS'
+        when :en then 'ENG'
+        else 'LAT'
+        end
+      end
 
       def escape(html_attribute_value)
          CGI.escapeHTML(html_attribute_value) unless html_attribute_value.nil?
