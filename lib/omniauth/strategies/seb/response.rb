@@ -22,8 +22,12 @@ module OmniAuth
           raw_str = SIGNED_KEYS.map{|k| prepend_length(@hash[k])}.join
           received_sig_str = Base64.decode64(@hash['IB_CRC'])
 
-          if !pub_key.verify(OpenSSL::Digest::SHA1.new, received_sig_str, raw_str)
-            raise ValidationError, 'Invalid signature'
+          if !pub_key.verify(OpenSSL::Digest::SHA512.new, received_sig_str, raw_str)
+            if !pub_key.verify(OpenSSL::Digest::SHA1.new, received_sig_str, raw_str)
+              raise ValidationError, 'Invalid signature'
+            else
+              OmniAuth.logger.debug('Received message with old SHA1 signature from SEB')
+            end
           end
 
           self
