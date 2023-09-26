@@ -99,9 +99,7 @@ module OmniAuth
 
       def set_locale_from_query_param
         locale = request.params['locale']
-        if (locale != nil && locale.strip != '' && I18n.locale_available?(locale))
-          I18n.locale = locale
-        end
+        I18n.locale = locale if I18n.locale_available?(locale)
       end
 
       def resolve_bank_ui_language
