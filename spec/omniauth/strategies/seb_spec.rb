@@ -1,12 +1,13 @@
 require 'spec_helper'
 require 'rack-protection'
+require 'rack/session'
 
 describe OmniAuth::Strategies::Seb do
   PUBLIC_CRT = File.read(File.join(RSpec.configuration.cert_folder, 'response.public.pem'))
   SND_ID = 'AAA'
 
   let(:app){ Rack::Builder.new do |b|
-    b.use Rack::Session::Cookie, {secret: 'abc123'}
+    b.use Rack::Session::Cookie, {secret: '5242e6bd9daf0e9645c2d4e22b11ba8cee0bed44439906d5f1bd5dad409d8637'}
     b.use OmniAuth::Strategies::Seb, PUBLIC_CRT, SND_ID
     b.run lambda{|env| [404, {}, ['Not Found']]}
   end.to_app }
@@ -76,7 +77,7 @@ describe OmniAuth::Strategies::Seb do
 
     context 'with non-existant public key file' do
       let(:app){ Rack::Builder.new do |b|
-        b.use Rack::Session::Cookie, {secret: 'abc123'}
+        b.use Rack::Session::Cookie, {secret: '5242e6bd9daf0e9645c2d4e22b11ba8cee0bed44439906d5f1bd5dad409d8637'}
         b.use(OmniAuth::Strategies::Seb, 'missing-public-key-file.pem', SND_ID )
         b.run lambda{|env| [404, {}, ['Not Found']]}
       end.to_app }
@@ -90,7 +91,7 @@ describe OmniAuth::Strategies::Seb do
 
     context 'with non-existant SND ID' do
       let(:app){ Rack::Builder.new do |b|
-        b.use Rack::Session::Cookie, {secret: 'abc123'}
+        b.use Rack::Session::Cookie, {secret: '5242e6bd9daf0e9645c2d4e22b11ba8cee0bed44439906d5f1bd5dad409d8637'}
         b.use(OmniAuth::Strategies::Seb, PUBLIC_CRT, nil )
         b.run lambda{|env| [404, {}, ['Not Found']]}
       end.to_app }
