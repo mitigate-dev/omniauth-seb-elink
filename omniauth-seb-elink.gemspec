@@ -6,11 +6,11 @@ require 'omniauth/seb/version'
 Gem::Specification.new do |gem|
   gem.name          = 'omniauth-seb-elink'
   gem.version       = Omniauth::Seb::VERSION
-  gem.authors       = ['MAK IT']
-  gem.email         = ['admin@makit.lv']
+  gem.authors       = ['Mitigate']
+  gem.email         = ['admin@mitigate.dev']
   gem.description   = %q{OmniAuth strategy for SEB e-link}
   gem.summary       = %q{OmniAuth strategy for SEB e-link}
-  gem.homepage      = 'https://github.com/mak-it/omniauth-seb-elink'
+  gem.homepage      = 'https://github.com/mitigate-dev/omniauth-seb-elink'
   gem.license       = 'MIT'
 
   gem.files         = `git ls-files`.split($/)
@@ -20,7 +20,7 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 2.2.2'
 
-  gem.add_runtime_dependency 'omniauth', '~> 1.0'
+  gem.add_runtime_dependency 'omniauth', '~> 2.1'
   gem.add_runtime_dependency 'i18n'
 
   gem.add_development_dependency 'rack-test'

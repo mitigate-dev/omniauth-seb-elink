@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'rack-protection'
 
 describe OmniAuth::Strategies::Seb do
   PUBLIC_CRT = File.read(File.join(RSpec.configuration.cert_folder, 'response.public.pem'))
@@ -10,8 +11,17 @@ describe OmniAuth::Strategies::Seb do
     b.run lambda{|env| [404, {}, ['Not Found']]}
   end.to_app }
 
+  let(:token){ Rack::Protection::AuthenticityToken.random_token }
+
   context 'request phase' do
-    before(:each) { get '/auth/seb' }
+    before(:each) do
+      post(
+        '/auth/seb',
+        {},
+        'rack.session' => {csrf: token},
+        'HTTP_X_CSRF_TOKEN' => token
+      )
+    end
 
     it 'displays a single form' do
       expect(last_response.status).to eq(200)
@@ -25,7 +35,7 @@ describe OmniAuth::Strategies::Seb do
     EXPECTED_VALUES = {
       'IB_SND_ID': SND_ID,
       'IB_SERVICE': OmniAuth::Strategies::Seb::AUTH_SERVICE,
-      'IB_LANG': 'LAT'
+      'IB_LANG': 'ENG'
     }
 
     EXPECTED_VALUES.each_pair do |k,v|
